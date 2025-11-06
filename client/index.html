@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Collaborative Canvas</title>
+  <link rel="stylesheet" href="/style.css" />
+</head>
+<body>
+  <div id="toolbar">
+    <label>Tool:
+      <select id="tool">
+        <option value="brush">Brush</option>
+        <option value="eraser">Eraser</option>
+        <option value="rect">Rectangle</option>
+        <option value="text">Text</option>
+        <option value="image">Image</option>
+      </select>
+    </label>
+    <label>Room: <input id="roomInput" type="text" value="main" style="width:120px" /></label>
+    <button id="roomJoin">Join</button>
+    <label>Color: <input id="color" type="color" value="#000000" /></label>
+    <label>Width: <input id="width" type="range" min="1" max="50" value="4" /></label>
+    <button id="undo">Undo</button>
+    <button id="redo">Redo</button>
+    <div id="users" title="Connected users"></div>
+  </div>
+
+  <div id="board">
+    <canvas id="canvas"></canvas>
+    <canvas id="overlay"></canvas>
+  </div>
+
+  <!-- name modal -->
+  <div id="nameModal" class="modal">
+    <div class="modal-content">
+      <h3>Enter your display name</h3>
+      <input id="nameInput" type="text" placeholder="Your name" maxlength="32" />
+      <div style="margin-top:8px">
+        <label>Room: <input id="nameRoomInput" type="text" value="main" style="width:120px" /></label>
+        <label style="margin-left:8px">Color: <input id="nameColorInput" type="color" value="#000000" /></label>
+      </div>
+      <div style="margin-top:10px; display:flex; gap:8px; justify-content:flex-end;">
+        <button id="nameSubmit">Join</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast hidden"></div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="/canvas.js"></script>
+  <script src="/websocket.js"></script>
+  <script src="/main.js"></script>
+</body>
+</html>
+
