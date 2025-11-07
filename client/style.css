@@ -1,28 +1,457 @@
-* { box-sizing: border-box; }
-html,body { height:100%; margin:0; font-family: Arial, Helvetica, sans-serif; }
-#toolbar { background:#f3f3f3; padding:8px; display:flex; gap:12px; align-items:center; }
-#board { position:relative; height: calc(100% - 48px); }
-#canvas { width:100%; height:100%; display:block; background:white; cursor:crosshair; touch-action: none; }
-#overlay { position:absolute; left:0; top:0; width:100%; height:100%; pointer-events:none; }
-#users { margin-left: auto; padding:6px 10px; background:#fff; border:1px solid #ddd; border-radius:6px; }
-.user-dot { display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:6px; vertical-align:middle; }
-.user-entry { display:inline-flex; align-items:center; margin-right:8px }
+/* ============================================
+   MODERN COLLABORATIVE CANVAS STYLING
+   ============================================ */
 
-/* small responsive */
-@media (max-width:600px) { #toolbar { flex-wrap:wrap } }
+* {
+  box-sizing: border-box;
+}
 
-/* larger touch targets */
-#toolbar input, #toolbar select, #toolbar button { padding:8px 10px; }
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  background: #fafafa;
+  color: #1f2937;
+}
 
-#metrics { position:fixed; left:12px; bottom:12px; background:#fff; padding:6px 8px; border-radius:6px; font-size:13px; box-shadow:0 4px 12px rgba(0,0,0,0.12); }
+/* ============================================
+   TOOLBAR
+   ============================================ */
+#toolbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background: #ffffff;
+  padding: 12px 16px;
+  display: flex;
+  gap: 16px;
+  align-items: center;
+  border-bottom: 1px solid #e5e7eb;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  z-index: 100;
+  flex-wrap: wrap;
+}
 
-/* modal for name entry */
-.modal { position:fixed; left:0; top:0; right:0; bottom:0; display:flex; align-items:center; justify-content:center; background:rgba(0,0,0,0.4); }
-.modal .modal-content { background:#fff; padding:18px; border-radius:8px; box-shadow:0 6px 18px rgba(0,0,0,0.2); width:320px; max-width:90%; }
-.modal input[type=text] { width:100%; padding:8px; font-size:16px; }
+#board {
+  position: relative;
+  height: calc(100% - 56px);
+  margin-top: 56px;
+}
 
-.modal.hidden { display:none; }
+/* ============================================
+   CANVAS
+   ============================================ */
+#canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  background: #ffffff;
+  cursor: crosshair;
+  touch-action: none;
+}
 
-/* toast */
-.toast { position:fixed; right:18px; bottom:18px; background:rgba(0,0,0,0.8); color:#fff; padding:10px 14px; border-radius:8px; font-size:14px; box-shadow:0 6px 18px rgba(0,0,0,0.2); }
-.toast.hidden { display:none }
+#overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ============================================
+   FORM ELEMENTS (Label, Input, Select, Button)
+   ============================================ */
+#toolbar label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  font-size: 14px;
+  color: #374151;
+}
+
+#toolbar input[type="text"],
+#toolbar input[type="color"],
+#toolbar input[type="range"],
+#toolbar select {
+  padding: 8px 10px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 13px;
+  font-family: inherit;
+  background: #ffffff;
+  transition: all 0.2s ease;
+}
+
+#toolbar input[type="text"],
+#toolbar select {
+  min-width: 100px;
+}
+
+#toolbar input[type="text"]:focus,
+#toolbar select:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+#toolbar input[type="color"] {
+  width: 40px;
+  height: 36px;
+  padding: 2px;
+  cursor: pointer;
+  border-radius: 6px;
+}
+
+#toolbar input[type="color"]:hover {
+  border-color: #2563eb;
+}
+
+#toolbar input[type="range"] {
+  width: 120px;
+  cursor: pointer;
+}
+
+#toolbar button {
+  padding: 8px 14px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+#toolbar button:hover {
+  background: #1d4ed8;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+}
+
+#toolbar button:active {
+  transform: translateY(1px);
+}
+
+/* ============================================
+   USER INDICATORS
+   ============================================ */
+#users {
+  margin-left: auto;
+  padding: 8px 12px;
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.user-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 4px;
+  vertical-align: middle;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.user-entry {
+  display: inline-flex;
+  align-items: center;
+  margin-right: 6px;
+  font-size: 12px;
+  color: #6b7280;
+}
+
+/* ============================================
+   METRICS DISPLAY
+   ============================================ */
+#metrics {
+  position: fixed;
+  left: 12px;
+  bottom: 12px;
+  background: #ffffff;
+  padding: 10px 12px;
+  border-radius: 8px;
+  font-size: 12px;
+  color: #6b7280;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  font-family: 'Monaco', 'Courier New', monospace;
+  line-height: 1.4;
+}
+
+/* ============================================
+   MODAL (Name Entry)
+   ============================================ */
+.modal {
+  position: fixed;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  animation: fadeIn 0.2s ease;
+}
+
+.modal.hidden {
+  display: none;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal .modal-content {
+  background: #ffffff;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 10px 38px rgba(0, 0, 0, 0.15);
+  width: 340px;
+  max-width: 90%;
+  animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-content h3 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1f2937;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="color"],
+.modal-content label {
+  font-size: 14px;
+}
+
+.modal-content input[type="text"] {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s ease;
+}
+
+.modal-content input[type="text"]:focus {
+  outline: none;
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.modal-content > div:nth-of-type(1) {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.modal-content > div:nth-of-type(2) {
+  margin-top: 16px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.modal-content button {
+  padding: 10px 20px;
+  background: #2563eb;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.modal-content button:hover {
+  background: #1d4ed8;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.15);
+}
+
+.modal-content button:active {
+  transform: translateY(1px);
+}
+
+/* ============================================
+   TOAST NOTIFICATIONS
+   ============================================ */
+.toast {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  background: rgba(31, 41, 55, 0.95);
+  color: #ffffff;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+  backdrop-filter: blur(10px);
+  animation: toastIn 0.3s ease forwards;
+  z-index: 999;
+}
+
+.toast.hidden {
+  display: none;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes toastOut {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  to {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+}
+
+.toast.exit {
+  animation: toastOut 0.3s ease forwards;
+}
+
+/* ============================================
+   RESPONSIVE DESIGN
+   ============================================ */
+@media (max-width: 768px) {
+  #toolbar {
+    padding: 10px 12px;
+    gap: 12px;
+  }
+
+  #toolbar label {
+    font-size: 13px;
+  }
+
+  #toolbar input[type="text"],
+  #toolbar select {
+    min-width: 80px;
+    padding: 6px 8px;
+    font-size: 12px;
+  }
+
+  #toolbar button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+
+  #users {
+    margin-left: 0;
+    padding: 6px 10px;
+    font-size: 12px;
+    order: -1;
+  }
+
+  .modal .modal-content {
+    width: 100%;
+    max-width: 85%;
+    padding: 20px;
+  }
+
+  .modal-content > div:nth-of-type(1) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .modal-content label {
+    margin-left: 0 !important;
+  }
+}
+
+@media (max-width: 480px) {
+  #toolbar {
+    padding: 8px 10px;
+    gap: 8px;
+  }
+
+  #toolbar label {
+    font-size: 12px;
+  }
+
+  #toolbar input[type="text"],
+  #toolbar select {
+    min-width: 70px;
+    padding: 6px 8px;
+    font-size: 11px;
+  }
+
+  #toolbar button {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+
+  .user-entry {
+    font-size: 11px;
+  }
+
+  .modal .modal-content {
+    padding: 16px;
+  }
+
+  .modal-content h3 {
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+
+  .modal-content > div:nth-of-type(2) {
+    gap: 8px;
+  }
+
+  .modal-content button {
+    padding: 8px 16px;
+    font-size: 13px;
+  }
+
+  #metrics {
+    font-size: 11px;
+    padding: 8px 10px;
+  }
+
+  .toast {
+    right: 12px;
+    bottom: 12px;
+    padding: 10px 12px;
+    font-size: 12px;
+  }
+}
