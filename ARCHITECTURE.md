@@ -9,6 +9,8 @@ This document describes the architecture decisions, data flow, WebSocket protoco
 - When the client completes a stroke (pointer up), it sends `stroke` with `final:true`. The server then commits the operation to its authoritative operation log and emits `op-added` containing the full committed op (including server-assigned op id and author attribution).
 - Clients append `op-added` to their local op list and redraw.
 
+![alt text](<Architecture.png>)
+
 2) WebSocket protocol (messages)
 
 - `init` (server -> client): { ops: [op], users: {id->{name,color,cursor}} } — initial snapshot on connect.
